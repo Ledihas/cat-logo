@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1ebd0;
+
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        main {
+            padding: 2rem;
+        }
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .producto {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .producto:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        .producto img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .producto h3 {
+            margin: 0.5rem 0 0.25rem;
+        }
+        .producto p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 600px) {
+            .productos {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .filtros {
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid #ffe59d8e;
+            border-radius: 25px;
+            background-color: rgb(245, 223, 177);
+        }
+        .filtros button {
+            margin: 0.3rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #31363b;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .filtros button:hover {
+            background-color: #0b0c0c;
+        }
+
+    </style>
+    <script>
+        function filtrar(nombre) {
+            const productos = document.querySelectorAll('.producto');
+            productos.forEach(prod => {
+                const titulo = prod.querySelector('h3').innerText;
+                prod.style.display = nombre === 'Todos' || titulo === nombre ? '' : 'none';
+            });
+        }
+    </script>
+
+    
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+    </header>
+    <main>
+        <div class="filtros">
+            <button onclick="filtrar('Todos')">Todos</button>
+            {% for product in products %}
+                <button onclick="filtrar('{{ product.name }}')">{{ product.name }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="productos">
+            {% for product in products %}
+            <div class="producto">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/200" alt="Imagen no disponible">
+                {% endif %}
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p><strong>Precio:</strong> ${{ product.price }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
