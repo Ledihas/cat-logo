@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_lwm(b9zkpo+ty=zs2x-lr36=qosuq+!0v9gi$4!jsri=n1ddh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cat-logo.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,28 +75,22 @@ WSGI_APPLICATION = 'ComercePrjoject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import os
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if(os.environ.get('DATABASE_URL')):
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
     }
-}
-
-"""
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'catalogo',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb+srv://zaza:1234@database.d7kju.mongodb.net/catalogo?retryWrites=true&w=majority&appName=database',
-           
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-}
-"""
+
+
 
 
 # Password validation
