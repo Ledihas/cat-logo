@@ -9,3 +9,4 @@ pillow==11.3.0
 pytz==2025.2
 sqlparse==0.5.3
 gunicorn
+psycopg2-binary
