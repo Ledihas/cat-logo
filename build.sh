@@ -23,7 +23,7 @@ python manage.py migrate --noinput
 # Create superuser if CREATE_SUPERUSER is set
 if [[ $CREATE_SUPERUSER == "true" ]]; then
     echo "Creando superusuario..."
-    python manage.py createsuperuser --no-input --email $DJANGO_SUPERUSER_EMAIL --username $DJANGO_SUPERUSER_USERNAME --password $DJANGO_SUPERUSER_PASS
+    python manage.py createsuperuser --no-input --email $DJANGO_SUPERUSER_EMAIL --username $DJANGO_SUPERUSER_USERNAME #--password $DJANGO_SUPERUSER_PASS
 fi
 
 echo "Tareas de construcción completadas."
