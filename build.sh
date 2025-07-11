@@ -22,8 +22,24 @@ python manage.py migrate --noinput
 
 # Create superuser if CREATE_SUPERUSER is set
 if [[ $CREATE_SUPERUSER == "true" ]]; then
-    echo "Creando superusuario..."
-    python manage.py createsuperuser --no-input --email $DJANGO_SUPERUSER_EMAIL --username $DJANGO_SUPERUSER_USERNAME #--password $DJANGO_SUPERUSER_PASS
+    echo "Creando/overriding superusuario via script…"
+    python manage.py shell <<EOF
+from django.contrib.auth import get_user_model
+U = get_user_model()
+U.objects.update_or_create(
+    username='$DJANGO_SUPERUSER_USERNAME',
+    defaults={
+        'email': '$DJANGO_SUPERUSER_EMAIL',
+        'is_staff': True,
+        'is_superuser': True
+    }
+)
+u = U.objects.get(username='$DJANGO_SUPERUSER_USERNAME')
+u.set_password('$DJANGO_SUPERUSER_PASSWORD')
+u.save()
+print("– Superusuario listo: $DJANGO_SUPERUSER_USERNAME / [PASSWORD SET]")
+EOF
 fi
+
 
 echo "Tareas de construcción completadas."
